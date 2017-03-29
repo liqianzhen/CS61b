@@ -49,8 +49,14 @@ public class LinkedListDeque<Blorp> {
     }
 
     public Item removeFirst() {
-        sentinel.next=sentinel.next.next;
-        sentinel.next.previous=sentinel;
+        if (sentinel==sentinel.next){
+            return null;
+        } else {
+            Blorp n=sentinel.next.item;
+            sentinel.next=sentinel.next.next;
+            sentinel.next.previous=sentinel;
+            return n;
+        }
     }
 
     public Item removeLast() {
