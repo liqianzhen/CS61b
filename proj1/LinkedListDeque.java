@@ -60,7 +60,18 @@ public class LinkedListDeque<Blorp> {
     }
 
     public Item removeLast() {
-        sentinel.previous=sentinel.previous.previous;
-        sentinel.previous.next=sentinel;
+        if (sentinel==sentinel.next) {
+            return null;
+        } else {
+            Blorp m=sentinel.previous.item;
+            sentinel.previous=sentinel.previous.previous;
+            sentinel.previous.next=sentinel;
+            return m;
+        }
+    }
+
+    public Item get(int index) {
+        Node q=sentinel;
+
     }
 }
