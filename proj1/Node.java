@@ -11,7 +11,7 @@ public class Node {
         item=x;
         next=n;
     }
-    private static Blorp Nodeget(Node x, int y) {
+    public static Blorp Nodeget(Node x, int y) {
         if (y==0) {
             return x.item;
         }

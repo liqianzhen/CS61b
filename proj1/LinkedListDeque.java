@@ -87,6 +87,6 @@ public class LinkedListDeque<Blorp> {
         if (index+1>this.size()) {
             return null;
         }
-            return Nodeget(sentinel.next,index);
+            return Node.Nodeget(sentinel.next,index);
     }
 }
