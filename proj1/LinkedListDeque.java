@@ -48,7 +48,7 @@ public class LinkedListDeque<Blorp> {
         }
     }
 
-    public Item removeFirst() {
+    public Blorp removeFirst() {
         if (sentinel==sentinel.next){
             return null;
         } else {
@@ -59,7 +59,7 @@ public class LinkedListDeque<Blorp> {
         }
     }
 
-    public Item removeLast() {
+    public Blorp removeLast() {
         if (sentinel==sentinel.next) {
             return null;
         } else {
@@ -70,8 +70,23 @@ public class LinkedListDeque<Blorp> {
         }
     }
 
-    public Item get(int index) {
-        Node q=sentinel;
+    public Blorp getIteration(int index) {
+        if (index+1>this.size()) {
+            return null;
+        } else {
+            Node q=sentinel.next;
+            while (index!=0) {
+                q=q.next;
+                index-=1;
+            }
+            return q.item;
+        }
+    }
 
+    public Blorp getRecursive(int index) {
+        if (index+1>this.size()) {
+            return null;
+        }
+            return Nodeget(sentinel.next,index);
     }
 }
