@@ -27,6 +27,8 @@ public class LinkedListDeque<Blorp> {
 
     public LinkedListDeque() {
         sentinel = new Node(null, null, null);
+        sentinel.next=sentinel;
+        sentinel.previous=sentinel;
         size = 0;
     }
 
@@ -43,14 +45,14 @@ public class LinkedListDeque<Blorp> {
         size +=1;
     }
 
-    public void addback(Blorp item) {
+    public void addLast(Blorp item) {
         sentinel.previous=new Node(sentinel.previous,item,sentinel);
         sentinel.previous.previous.next=sentinel.previous;
         size +=1;
     }
 
     public boolean isEmpty() {
-        if (sentinel==null) {
+        if (sentinel.next==sentinel) {
             return true;
         }
         return false;
