@@ -3,7 +3,27 @@
  */
 public class LinkedListDeque<Blorp> {
     private Node sentinel;
-    private int size;
+    public int size;
+
+    public class Node {
+        public Blorp item;
+        public Node next;
+        public Node previous;
+
+        public Node (Node p, Blorp x, Node n) {
+            previous=p;
+            item=x;
+            next=n;
+        }
+
+        private Blorp Nodeget(Node x, int y) {
+            if (y==0) {
+                return x.item;
+            }
+            return Nodeget(x.next,y-1);
+        }
+
+    }
 
     public LinkedListDeque() {
         sentinel = new Node(null, null, null);
@@ -55,6 +75,7 @@ public class LinkedListDeque<Blorp> {
             Blorp n=sentinel.next.item;
             sentinel.next=sentinel.next.next;
             sentinel.next.previous=sentinel;
+            size-=1;
             return n;
         }
     }
@@ -66,6 +87,7 @@ public class LinkedListDeque<Blorp> {
             Blorp m=sentinel.previous.item;
             sentinel.previous=sentinel.previous.previous;
             sentinel.previous.next=sentinel;
+            size-=1;
             return m;
         }
     }
@@ -87,6 +109,6 @@ public class LinkedListDeque<Blorp> {
         if (index+1>this.size()) {
             return null;
         }
-            return Node.Nodeget(sentinel.next,index);
+            return sentinel.Nodeget(sentinel.next,index);
     }
 }
