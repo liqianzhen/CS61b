@@ -15,7 +15,8 @@ public class LinkedListDeque<Blorp> {
             item=x;
             next=n;
         }
-
+        /* cannot use static here
+         */
         private Blorp Nodeget(Node x, int y) {
             if (y==0) {
                 return x.item;
