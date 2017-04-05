@@ -16,14 +16,18 @@ public class ArrayDeque<blorp> {
     }
 
     public void addFirst(blorp x) {
+        if (size==items.length) {
+            Resize(Rfactor*size);
+        }
         items[nextFirst]=x;
         nextFirst=MinusOne(nextFirst);
         size+=1;
     }
 
-    private void Resize() {
-        blorp [] a=(blorp[]) new Object [size*Rfactor];
-        System.arraycopy(items,);
+    private void Resize(int capacity) {
+        blorp [] a=(blorp[]) new Object [capacity];
+        System.arraycopy(items,PlusOne(nextFirst),a,PlusOne(nextFirst),size);
+        items=a;
     }
 
     private int MinusOne (int x) {
@@ -35,6 +39,9 @@ public class ArrayDeque<blorp> {
     }
 
     public void addLast (blorp x) {
+        if (size==items.length) {
+            Resize(Rfactor*size);
+        }
         items[nextLast]=x;
         nextLast=PlusOne(nextLast);
         size+=1;
@@ -72,8 +79,11 @@ public class ArrayDeque<blorp> {
             return null;
         } else {
             nextFirst=PlusOne(nextFirst);
-            return items[nextFirst];
+            blorp p=items[nextFirst];
             items[nextFirst]=null;
+            size-=1;
+            downsize(size/items.length);
+            return p;
         }
     }
 
@@ -82,8 +92,11 @@ public class ArrayDeque<blorp> {
             return null;
         } else {
             nextLast=MinusOne(nextLast);
-            return items[nextLast];
+            blorp p=items[nextLast];
             items[nextLast]=null;
+            size-=1;
+            downsize(size/items.length);
+            return p;
         }
     }
 
@@ -101,4 +114,9 @@ public class ArrayDeque<blorp> {
         return PlusOne(nextFirst)+x;
     }
 
+    private void downsize(double Ufactor) {
+        if (size>=16 && Ufactor<0.25) {
+            Resize(items.length/2);
+        }
+    }
 }
