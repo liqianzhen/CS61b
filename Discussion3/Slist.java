@@ -9,7 +9,7 @@ public class Slist {
         }
     }
 
-    private Snode front;
+    public Snode front;
     public int size;
 
     public Slist() {
@@ -23,24 +23,45 @@ public class Slist {
     }
 
     public void insert(int item, int position) {
-        Snode previous=GetLocation(position);
-        previous=new Snode(item,previous.next);
-    }
-
-    private Snode GetLocation(int position) {
-        if (position>size-1) {
+        if (position==0) {
+            insertfront(item);
+            size+=1;
+        } else if (position>size) {
             position=size-1;
-        }
-        Snode p=front;
-        while (position!=0) {
+        } else {
+        Snode p= front;
+        while (position>1) {
             p=p.next;
             position-=1;
         }
-        return p;
+        p.next=new Snode(item,p.next);
+        size+=1;}
     }
 
-    public void reverse () {
-        
+   /* public void reverseIteration () {
+        int index=size;
+        Snode p=GetLocation(index);
+        Snode q=p;
+        while (index>1) {
+            index-=1;
+            q=q.next;
+            q=GetLocation(index);
+        }
+        q.next=null;
+        front=p;
     }
+    */
 
+    public static void main(String[] args) {
+        Slist a=new Slist();
+        a.insertfront(1);
+        a.insertfront(2);
+        a.insertfront(3);
+        a.insert(5,3);
+        System.out.println(a.front.item);
+        System.out.println(a.front.next.item);
+        System.out.println(a.front.next.next.item);
+        System.out.println(a.front.next.next.next.item);
+
+    }
 }
