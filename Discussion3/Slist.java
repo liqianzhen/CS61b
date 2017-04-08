@@ -10,54 +10,45 @@ public class Slist {
     }
 
     public Snode front;
-    public int size;
-
-    public Slist() {
-        front=null;
-        size=0;
-    }
 
     public void insertfront(int x) {
         front=new Snode(x,front);
-        size+=1;
     }
 
     public void insert(int item, int position) {
-        if (position==0) {
+        if (position==0 || front==null) {
             insertfront(item);
-            size+=1;
-        } else if (position>size) {
-            position=size-1;
         } else {
-        Snode p= front;
-        while (position>1) {
-            p=p.next;
-            position-=1;
+            Snode p=front;
+            while (position>1 && p.next!=null) {
+                p=p.next;
+                position-=1;
+            }
+            p.next=new Snode(item,p.next);
         }
-        p.next=new Snode(item,p.next);
-        size+=1;}
     }
 
-   /* public void reverseIteration () {
-        int index=size;
-        Snode p=GetLocation(index);
-        Snode q=p;
-        while (index>1) {
-            index-=1;
-            q=q.next;
-            q=GetLocation(index);
+    public void reverseIterative() {
+        Snode frontofreverse=null;
+        Snode NexttoAdd=front;
+        while (NexttoAdd!=null) {
+            Snode remainderoforigin=NexttoAdd.next;
+            NexttoAdd.next=frontofreverse;
+            frontofreverse=NexttoAdd;
+            NexttoAdd=remainderoforigin;
         }
-        q.next=null;
-        front=p;
+        front=frontofreverse;
     }
-    */
+
+
+
 
     public static void main(String[] args) {
         Slist a=new Slist();
         a.insertfront(1);
         a.insertfront(2);
         a.insertfront(3);
-        a.insert(5,3);
+        a.insert(5,1);
         System.out.println(a.front.item);
         System.out.println(a.front.next.item);
         System.out.println(a.front.next.next.item);
