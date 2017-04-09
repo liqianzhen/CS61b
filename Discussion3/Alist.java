@@ -23,21 +23,44 @@ public class Alist {
         }
     }
 
+    public static int[] xify(int[] x) {
+        int[] newArray= new int[ArraySum(x)];
+        int SumcopyNumber=0;
+        for (int i=0; i<x.length; i++) {
+            for (int j=0;j<x[i];j++) {
+                newArray[SumcopyNumber+j]=x[i];
+            }
+            SumcopyNumber+=x[i];
+
+        }
+        return newArray;
+    }
+
+    private static int ArraySum (int[] x){
+        int a=0;
+        for (int i=0; i<x.length; i++) {
+            a+=x[i];
+        }
+        return a;
+    }
+
     public static void main(String[] args) {
-        int [] resultarray=new int[] {1,2,3,4,5};
-        /*int [] resultarray=insert(testarray,9,3);*/
+        int [] array=new int[] {1,2,3,4};
+
+        int [] resultarray=xify(array);
 
         System.out.print(resultarray[0]);
         System.out.print(resultarray[1]);
         System.out.print(resultarray[2]);
         System.out.print(resultarray[3]);
         System.out.print(resultarray[4]);
-        reverse(resultarray);
-        System.out.print(resultarray[0]);
-        System.out.print(resultarray[1]);
-        System.out.print(resultarray[2]);
-        System.out.print(resultarray[3]);
-        System.out.print(resultarray[4]);
+        System.out.print(resultarray[5]);
+        System.out.print(resultarray[6]);
+        System.out.print(resultarray[7]);
+        System.out.print(resultarray[8]);
+        System.out.print(resultarray[9]);
+
+
     }
 }
 
