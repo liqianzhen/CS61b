@@ -28,7 +28,7 @@ public class Slist {
         }
     }
 
-    public void reverseIterative() {
+    public void reverseIterative (){
         Snode frontofreverse=null;
         Snode NexttoAdd=front;
         while (NexttoAdd!=null) {
@@ -40,7 +40,20 @@ public class Slist {
         front=frontofreverse;
     }
 
+   public void reverseRecursion() {
+        front=RecursionHelper(front);
+   }
 
+   private static Snode RecursionHelper(Snode x) {
+        if (x==null || x.next==null) {
+            return x;
+        } else {
+            Snode reverse=RecursionHelper(x.next);
+            x.next.next=x;
+            x.next=null;
+            return reverse;
+        }
+   }
 
 
     public static void main(String[] args) {
@@ -48,7 +61,8 @@ public class Slist {
         a.insertfront(1);
         a.insertfront(2);
         a.insertfront(3);
-        a.insert(5,1);
+        a.insert(5,3);
+        a.reverseRecursion();
         System.out.println(a.front.item);
         System.out.println(a.front.next.item);
         System.out.println(a.front.next.next.item);
