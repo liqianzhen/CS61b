@@ -127,7 +127,7 @@ public class IntList {
         if (A==null) {
             return B;
         }
-        return new IntList(A.head,dcatenate(A.tail, B));
+        return new IntList(A.head,catenate(A.tail, B));
     }
 
     /**
@@ -136,6 +136,24 @@ public class IntList {
      * trickery which we implemented to help make your life a little easier for
      * the lab.
      */
+
+    /**
+     * Returns the reverse of the given IntList.
+     * This method is destructive. If given null
+     * as an input, returns null.
+     */
+    public static IntList reverse(IntList A) {
+        if (A==null || A.tail==null) {
+            return A;
+        } else {
+           IntList ReverseofOrigin=reverse(A.tail);
+           A.tail.tail=A;
+           A.tail=null;
+           return ReverseofOrigin;
+        }
+
+    }
+
 
     @Override
     public int hashCode() {
