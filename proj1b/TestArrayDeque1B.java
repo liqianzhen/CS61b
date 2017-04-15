@@ -9,10 +9,29 @@ public class TestArrayDeque1B {
     @Test
     public void TestStudentArrayDeque() {
         StudentArrayDeque<Integer> student = new StudentArrayDeque<Integer>();
-        student.addLast(5);
-        student.addFirst(1);
-        student.removeFirst();
-        student.removeLast();
-        assertEquals(0,student.get(0).intValue());
+        ArrayDequeSolution<Integer> solution= new ArrayDequeSolution<Integer>();
+
+        int i=StdRandom.uniform(3);
+        int MethodCounter=0;
+
+        if (i==0) {
+            solution.addFirst(8);
+            student.addFirst(8);
+            assertEquals(solution.get(0),student.get(0));
+            MethodCounter++;
+        } else if (i==1) {
+             student.removeFirst();
+             solution.removeFirst();
+             MethodCounter--;
+        } else if (i==2) {
+             student.addLast(3);
+             solution.addLast(3);
+             MethodCounter++;
+        } else if (i==3) {
+             student.removeLast();
+             solution.removeLast();
+             MethodCounter--;
+        }
+
     }
 }
