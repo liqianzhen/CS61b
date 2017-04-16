@@ -19,15 +19,16 @@ public class TestArrayDeque1B {
             student.addFirst(8);
             assertEquals(solution.get(0),student.get(0));
             MethodCounter++;
-        } else if (i==1) {
+        } else if (i==1 && MethodCounter>0) {
              student.removeFirst();
              solution.removeFirst();
              MethodCounter--;
         } else if (i==2) {
              student.addLast(3);
              solution.addLast(3);
+             ass
              MethodCounter++;
-        } else if (i==3) {
+        } else if (i==3 && MethodCounter>0) {
              student.removeLast();
              solution.removeLast();
              MethodCounter--;
