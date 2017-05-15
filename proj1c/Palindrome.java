@@ -6,28 +6,51 @@ public class Palindrome {
 
         /* build a Deque where the characters in the deque appear in the same order as in the word */
 
-        Deque<Character> WordDeque= new LinkedListDequeSolution<Character>();
-        for (int i=0;i<word.length();i++) {
-            WordDeque.addLast(word.charAt(i));
+        if (word.length() == 0) {
+            Deque<Character> WordDeque = new LinkedListDequeSolution<Character>();
+            return WordDeque;
+        } else {
+            Deque<Character> WordDeque = wordToDeque(word.substring(1, word.length()));
+            WordDeque.addFirst(word.charAt(0));
+            return WordDeque;
         }
-        return WordDeque;
     }
 
-    /* return true if the word is Palindrome */
 
+    /* return true if the word is Palindrome */
     public static boolean isPalindrome(String word) {
-        if (word.length()>1) {
-            for (int i=0;i<word.length();i++) {
-                if (word.charAt(i)!=word.charAt(word.length()-i-1)) {
-                    return false;
-                }
-            }
+        return isPalindromeHelper(wordToDeque(word));
+    }
+
+
+    public static boolean isPalindromeHelper(Deque<Character> WordDeque) {
+        if (WordDeque.size()<2) {
+            return true;
+        } else if (WordDeque.removeFirst()!=WordDeque.removeLast()) {
+            return false;
+        } else {
+            return isPalindromeHelper(WordDeque);
         }
-        return true;
+    }
+
+    public static boolean isPalindrome(String word, CharacterComparator cc) {
+        return isPalindromeHelper(wordToDeque(word), cc);
+    }
+
+
+    public static boolean isPalindromeHelper(Deque<Character> WordDeque, CharacterComparator cc) {
+        if (WordDeque.size()<2) {
+            return true;
+        } else if (!cc.equalChars(WordDeque.removeFirst(),WordDeque.removeLast())) {
+            return false;
+        } else {
+            return isPalindromeHelper(WordDeque,cc);
+        }
     }
 
     public static void main(String[] args) {
-        System.out.print(isPalindrome("rar"));
-
+        wordToDeque("H").printDeque();
+        System.out.print(isPalindrome("rrr"));
+        System.out.print(isPalindrome("flake",new OffByOne()));
     }
 }
