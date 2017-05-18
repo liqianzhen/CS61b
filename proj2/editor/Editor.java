@@ -29,7 +29,7 @@ public class Editor extends Application {
 
         /** The Text to display on the screen. */
         private Text displayText = new Text(STARTING_TEXT_POSITION_X, STARTING_TEXT_POSITION_Y, "");
-        private LinkedList<String> characterTyped= new LinkedList<String>();;
+        private LinkedList<String> characterTyped = new LinkedList<String>();
         private int fontSize = STARTING_FONT_SIZE;
 
         private String fontName = "Verdana";
@@ -52,7 +52,7 @@ public class Editor extends Application {
             root.getChildren().add(displayText);
         }
 
-        private String CombineList(LinkedList<String> A){
+        private String combineList(LinkedList<String> A) {
             String wholeCharacterTyped="";
             for (int i=0; i<A.size(); i++) {
                 String temp=A.removeFirst();
@@ -75,12 +75,12 @@ public class Editor extends Application {
                     // Ignore control keys, which have non-zero length, as well as the backspace
                     // key, which is represented as a character of value = 8 on Windows.
                     characterTyped.addLast(characterCurrentTyped);
-                    displayText.setText(CombineList(characterTyped));
+                    displayText.setText(combineList(characterTyped));
                     //should added the typed letter to the displayText
                     keyEvent.consume();
-                } else if (characterCurrentTyped.length()==0) {
+                } else if (characterCurrentTyped.length() == 0) {
                     characterTyped.removeLast();
-                    displayText.setText(CombineList(characterTyped));
+                    displayText.setText(combineList(characterTyped));
                     keyEvent.consume();
                 }
 
