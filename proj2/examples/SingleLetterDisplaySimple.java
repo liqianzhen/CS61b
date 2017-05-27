@@ -53,6 +53,7 @@ public class SingleLetterDisplaySimple extends Application {
         }
 
         @Override
+        //handle should be a method of eventhandler, KeyEvent should be a class.
         public void handle(KeyEvent keyEvent) {
             if (keyEvent.getEventType() == KeyEvent.KEY_TYPED) {
                 // Use the KEY_TYPED event rather than KEY_PRESSED for letter keys, because with
@@ -63,7 +64,9 @@ public class SingleLetterDisplaySimple extends Application {
                     // Ignore control keys, which have non-zero length, as well as the backspace
                     // key, which is represented as a character of value = 8 on Windows.
                     displayText.setText(characterTyped);
+                    //should added the typed letter to the displayText
                     keyEvent.consume();
+                    //.consume should be some method to delete the letter typed
                 }
 
                 centerText();
@@ -90,8 +93,8 @@ public class SingleLetterDisplaySimple extends Application {
             double textWidth = displayText.getLayoutBounds().getWidth();
 
             // Calculate the position so that the text will be centered on the screen.
-            double textTop = textCenterY - textHeight / 2;
-            double textLeft = textCenterX - textWidth / 2;
+            double textTop = textCenterY - textHeight / 2;// note less value means near the top
+            double textLeft = textCenterX - textWidth / 2;// note less value means near the left
 
             // Re-position the text.
             displayText.setX(textLeft);
