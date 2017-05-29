@@ -1,6 +1,8 @@
 // TODO: Make sure to make this class a part of the synthesizer package
 package synthesizer;
 
+import java.util.Iterator;
+
 //Make sure this class is public
 public class GuitarString {
     /** Constants. Do not change. In case you're curious, the keyword final means
@@ -19,6 +21,8 @@ public class GuitarString {
         //       accuracy, use the Math.round() function before casting.
         //       Your buffer should be initially filled with zeros.
         buffer = new ArrayRingBuffer<Double>((int) Math.round(SR/frequency));
+
+
         for (int i=0; i<buffer.capacity(); i++) {
             buffer.enqueue(0.0);
         }
@@ -33,11 +37,18 @@ public class GuitarString {
         //       double r = Math.random() - 0.5;
         //
         //       Make sure that your random numbers are different from each other.
-        for (int i=0; i<buffer.capacity(); i++) {
+        for (double x : buffer) {
             double r = Math.random() - 0.5;
             buffer.dequeue();
             buffer.enqueue(r);
+
         }
+
+        /*for (int i=0; i<buffer.capacity(); i++) {
+            double r = Math.random() - 0.5;
+            buffer.dequeue();
+            buffer.enqueue(r);
+        }*/
     }
 
     /* Advance the simulation one time step by performing one iteration of
