@@ -10,7 +10,5 @@ public class remainder {
 
 
 
-        System.out.print(test.leadingNode);
-
     }
 }
