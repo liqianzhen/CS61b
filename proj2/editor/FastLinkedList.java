@@ -1,6 +1,7 @@
 package editor;
 
 
+import javafx.scene.input.KeyCode;
 import javafx.scene.text.Text;
 
 /**
@@ -14,7 +15,7 @@ public class FastLinkedList {
 
     private Node [] leadingNode;
     private int [] leadingNodePos;
-    private int leadingNodesize=0;
+    private int leadingNodesize;
 
     private class Node {
         private Text nodeText;
@@ -38,7 +39,10 @@ public class FastLinkedList {
     }
 
     public void addChar(char x) {
-        currentNode.next=new Node(currentNode, new Text(""+x), currentNode.next);
+        if (x == '\n') {
+            x = '\r';
+        }
+        currentNode.next=new Node(currentNode, new Text("" + x), currentNode.next);
         currentNode.next.next.previous=currentNode.next;
         currentNode=currentNode.next;
         currentPos +=1;
@@ -63,22 +67,50 @@ public class FastLinkedList {
     and setCurrentNode method can set currentNode according to the the row and column number
      row and column number should be got from other program*/
 
+    public void arrowKeyHandler(KeyCode x) {
+        if (x == KeyCode.UP) {
+            Node temp = currentNode;
+            while (currentNode != sentinel && (currentNode.nodeText.getY() >= temp.nodeText.getY() || currentNode.nodeText.getX() > temp.nodeText.getX()) ){
+                currentNode=currentNode.previous;
+            }
+            if (currentNode == sentinel) {
+                currentNode = temp;
+            }
+        } else if (x == KeyCode.DOWN) {
+            Node temp = currentNode;
+            while (currentNode != sentinel && (currentNode.nodeText.getY() <= temp.nodeText.getY() || currentNode.nodeText.getX() < temp.nodeText.getX()) ){
+                currentNode=currentNode.next;
+            }
+            if (currentNode == sentinel) {
+                currentNode = sentinel.previous;
+            }
+        } else if (x == KeyCode.RIGHT) {
+            currentNode = NodeGet(currentNode, 1);
+        } else if (x == KeyCode.LEFT) {
+            currentNode = NodeGet(currentNode, -1);
+        }
+    }
+
     public void setCurrentNode(int row, int column) {
-        currentNode=NodeGet(leadingNode[row], column-1);
-        currentPos=leadingNodePos[row]+column-1;
+        currentNode = NodeGet(leadingNode[row], column-1);
+        currentPos = leadingNodePos[row]+column-1;
     }
 
     /* Nodeget is a helper method that can help x next of Node a */
 
     private static Node NodeGet (Node a, int x) {
-        if (x==0) {
-            return a;
-        } else {
+        if (x > 0 && a.next.nodeText != null) {
             return NodeGet(a.next,x-1);
-        }
+        } else if (x < 0 && a.nodeText != null) {
+            return NodeGet(a.previous, x+1);
+        }   return a;
     }
 
     public void coordinateUpdate(int STARTING_TEXT_POSITION_X, int STARTING_TEXT_POSITION_y, int windowWidth) {
+        //initiate and assign a new leadingNode array everytime updating the coordinates
+        leadingNode = new Node [10];
+        leadingNodesize = 0;
+
         Node p= sentinel.next;
         int x= STARTING_TEXT_POSITION_X;
         int y= STARTING_TEXT_POSITION_y;
@@ -88,6 +120,12 @@ public class FastLinkedList {
             if (x + p.nodeText.getLayoutBounds().getWidth() > windowWidth && wordwrap(p, STARTING_TEXT_POSITION_X)==sentinel) {
                // try to make sure the white space not wrap
 
+            } else if (p.nodeText.getText().equals("\r") ) {
+                x = STARTING_TEXT_POSITION_X;
+                y += p.nodeText.getLayoutBounds().getHeight();
+
+                //add the first node of each new line to the leading nodes
+                addLeadingNode(p);
             } else if (x + p.nodeText.getLayoutBounds().getWidth() > windowWidth) {
                 p=wordwrap(p, STARTING_TEXT_POSITION_X);
 
@@ -97,7 +135,7 @@ public class FastLinkedList {
                 y+=p.nodeText.getLayoutBounds().getHeight();
 
                 //add the first node of each new line to the leading nodes
-                
+                addLeadingNode(p);
 
             }
             p.nodeText.setX(x);
@@ -136,42 +174,21 @@ public class FastLinkedList {
         }
     }
 
-
-
     /*
     if increase a new line, add a node at the end of leadingNode array
      */
-    public void addLeadingNode() {
-        leadingNode[leadingNodesize]=sentinel.previous;
-        leadingNodesize+=1;
-    }
-
-     /*
-    if deduct a line, deduct a node at the end of leadingNode array
-     */
-
-    public void deleteLeadingNode() {
-        leadingNode[leadingNodesize-1]=null;
-        leadingNodesize-=1;
-    }
-
-    /*
-    move the leadingNode of everyline below x line one more next node
-     */
-    public void PushLeadingNode(int x) {
-        for (int i=x+1; i<leadingNodesize; i++) {
-            leadingNode[i]=leadingNode[i].next;
+    private void addLeadingNode(Node firstNode) {
+        if (leadingNodesize == leadingNode.length) {
+            Resize(leadingNode.length);
         }
+        leadingNode[leadingNodesize] = firstNode;
+        leadingNodesize += 1;
     }
 
-    /*
-    move the leadingNode of everyline below x line one more back node
-     */
-
-    public void PullLeadingNode(int x) {
-        for (int i=x+1; i<leadingNodesize; i++) {
-            leadingNode[i]=leadingNode[i].previous;
-        }
+    private void Resize(int capacity) {
+        Node [] a= new Node [2*capacity];
+        System.arraycopy(leadingNode, 0, a, 0, capacity);
+        leadingNode = a;
     }
 
     public void print() {
@@ -181,69 +198,6 @@ public class FastLinkedList {
             System.out.print(p.nodeText.getText());
         }
     }
-
-    /*private void recordLeadingNode(int x) {
-        //assume that a single line can only contain 10 character
-        int TotalLineNumber=size/10;
-        int remainder=size%10;
-        if (remainder==1) {
-            leadingNode[TotalLineNumber]=sentinel.previous;
-        } else {
-            HelpLeadingNode(x);
-        }
-    }
-
-    private void HelpLeadingNode(int x) {
-        for (int i=currentPos/10+1; i< size/10+1; i++) {
-            if (x>0) {
-                leadingNode[i]=leadingNode[i].next;
-            } else {
-                leadingNode[i]=leadingNode[i].previous;
-            }
-        }
-    }
-
-    private Node [] Resize(Node [] x, int capacity) {
-        Node [] a= new Node [2*capacity];
-        System.arraycopy(x, 0, a, 0, capacity);
-        return a;
-    }
-
-    private void downsize(double Ufactor) {
-        if (size>=16 && Ufactor<0.25) {
-            Resize(items.length/2);
-        }
-    }*/
-
-    /*
-        public static void main(String[] args) {
-        FastLinkedList test=new FastLinkedList();
-        test.addChar('1');
-        test.addChar('1');
-        test.addChar('1');
-        test.addChar('1');
-        test.addChar('1');
-        test.addChar('1');
-        test.addChar('1');
-        test.addChar('1');
-        test.addChar('1');
-        test.addChar('2');
-        test.deleteChar();
-        test.deleteChar();
-        test.addChar('3');
-        test.addChar('4');
-        //test.deleteChar();
-
-
-
-
-
-        System.out.print(test.leadingNode[1].nodeText.getText());
-        System.out.print(test.sentinel.previous.nodeText.getText());
-        System.out.print(test.currentNode.nodeText.getText());
-          }
-     */
-
 
 
 }

@@ -104,6 +104,8 @@ public class Editor extends Application {
 
 
     }
+
+
     @Override
     public void start(Stage primaryStage) {
         // Create a Node that will be the parent of all things displayed on the screen.

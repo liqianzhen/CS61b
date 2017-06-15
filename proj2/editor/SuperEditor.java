@@ -2,6 +2,7 @@ package editor;
 
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.VPos;
 import javafx.scene.Group;
@@ -11,6 +12,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 
 import java.io.*;
@@ -26,12 +28,21 @@ public class SuperEditor extends Application {
     private static final String fontName = "Verdana";
     private static final int STARTING_FONT_SIZE = 10;
 
-    private static FastLinkedList textContent = new FastLinkedList();
-    private Group root = new Group();
+    private final FastLinkedList textContent;
+    private final Group root;
+    private final Line cursor;
+
+    public SuperEditor() {
+        // Create a rectangle to surround the text that gets displayed.  Initialize it with a size
+        // of 0, since there isn't any text yet.
+        textContent = new FastLinkedList();
+        root = new Group();
+        cursor = new Line();
+    }
 
 
+    /** An EventHandler to handle keys that get pressed. */
     private class KeyEventHandler implements EventHandler<KeyEvent> {
-
 
         @Override
         public void handle(KeyEvent keyEvent) {
@@ -52,20 +63,33 @@ public class SuperEditor extends Application {
                 // events have a code that we can check (KEY_TYPED events don't have an associated
                 // KeyCode).
                 KeyCode code = keyEvent.getCode();
-                if (code == KeyCode.UP) {
-                    //fontSize += 5;
-                    //displayText.setFont(Font.font(fontName, fontSize));
-                    //centerText();
-                } else if (code == KeyCode.DOWN) {
-                    //fontSize = Math.max(0, fontSize - 5);
-                    //displayText.setFont(Font.font(fontName, fontSize));
-                    //centerText();
-                }
+
+                //deal with Arrow keys
+                textContent.arrowKeyHandler(code);
+
             }
             textContent.coordinateUpdate(0,0,100);
         }
-
     }
+
+    /** An EventHandler to handle changing the position of the cursor. */
+    private class CursorEventHandler implements EventHandler<ActionEvent> {
+        private final int cursorWidth = 1;
+        private int cursorheight;
+
+
+        private CursorEventHandler() {
+            cursor.setStartX();
+        }
+
+        @Override
+        public void handle(ActionEvent event) {
+
+        }
+    }
+
+
+
 
 
 
