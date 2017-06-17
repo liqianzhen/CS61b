@@ -158,7 +158,7 @@ public class FastLinkedList {
             return current;
         } else {
 
-            //find the whole word needs to be wrapped, find the fir
+            //find the whole word needs to be wrapped, find the starting character
 
             while (current!=sentinel && !Character.isWhitespace(current.nodeText.getText().charAt(0))) {
                 current=current.previous;
@@ -199,5 +199,8 @@ public class FastLinkedList {
         }
     }
 
+    public int size() {
+        return size;
+    }
 
 }

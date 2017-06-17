@@ -1,6 +1,8 @@
 package editor;
 
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -14,6 +16,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.*;
 
@@ -68,27 +71,65 @@ public class SuperEditor extends Application {
                 textContent.arrowKeyHandler(code);
 
             }
+            makeCursorChange();
             textContent.coordinateUpdate(0,0,100);
         }
     }
 
     /** An EventHandler to handle changing the position of the cursor. */
     private class CursorEventHandler implements EventHandler<ActionEvent> {
-        private final int cursorWidth = 1;
-        private int cursorheight;
+        private double startX;
+        private double startY;
+        private double endY;
 
 
         private CursorEventHandler() {
-            cursor.setStartX();
+            startX = 0;
+            startY = 0;
+            startY = 10;
+            cursor.setStrokeWidth(1);
+            cursorPositionChange();
+        }
+
+        private void positionGet() {
+            if (textContent.size() == 0) {
+                startX = 0;
+                startY = 0;
+                startY = 10;
+            } else {
+                startX = textContent.getText().getX() + textContent.getText().getLayoutBounds().getWidth();
+                startY = textContent.getText().getY();
+                endY =textContent.getText().getY() + textContent.getText().getLayoutBounds().getHeight();
+            }
+        }
+
+        private void cursorPositionChange() {
+            positionGet();
+            cursor.setStartX(startX);
+            cursor.setEndX(startX);
+            cursor.setStartY(startY);
+            cursor.setEndY(endY);
         }
 
         @Override
         public void handle(ActionEvent event) {
-
+            cursorPositionChange();
         }
     }
 
+    /** Makes the text bounding box change color periodically. */
+    public void makeCursorChange() {
+        // Create a Timeline that will call the "handle" function of RectangleBlinkEventHandler
+        // every 1 second.
+        final Timeline timeline = new Timeline();
+        // The rectangle should continue blinking forever.
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        CursorEventHandler cursorChange = new CursorEventHandler();
+        KeyFrame keyFrame = new KeyFrame(Duration.seconds(0.5), cursorChange);
 
+        timeline.getKeyFrames().add(keyFrame);
+        timeline.play();
+    }
 
 
 
@@ -134,12 +175,13 @@ public class SuperEditor extends Application {
 
             Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT, Color.WHITE);
 
-
-
+            //deal with the key input
             EventHandler<KeyEvent> keyEventHandler = new KeyEventHandler();
 
             scene.setOnKeyTyped(keyEventHandler);
             scene.setOnKeyPressed(keyEventHandler);
+
+            root.getChildren().add(cursor);
 
 
             primaryStage.setTitle("SuperEditor");
