@@ -28,7 +28,6 @@ public class BSTMap<K extends Comparable<K> , V> implements Map61B<K, V> {
     /** Removes all of the mappings from this map. */
     public void clear() {
         root = null;
-        root.size = 0;
     }
 
     @Override
@@ -54,7 +53,7 @@ public class BSTMap<K extends Comparable<K> , V> implements Map61B<K, V> {
             throw new IllegalArgumentException();
         } else if (x == null) {
             return null;
-        } else if (x.key == k) {
+        } else if (x.key.equals(k)) {
             return x.val;
         } else if (x.key.compareTo(k) < 0 ) {
             return get(x.right, k);
@@ -90,9 +89,9 @@ public class BSTMap<K extends Comparable<K> , V> implements Map61B<K, V> {
         if (x == null) {
             return new Node(key, value, 1);
         } else if (x.key.compareTo(key) < 0) {
-            x = put(x.right, key, value);
+            x.right = put(x.right, key, value);
         } else {
-            x = put(x.left, key, value);
+            x.left = put(x.left, key, value);
         }
         x.size = 1 + size(x.left) + size(x.right);
         return x;

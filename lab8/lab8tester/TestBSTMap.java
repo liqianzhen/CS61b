@@ -1,5 +1,7 @@
 package lab8tester;
 import static org.junit.Assert.*;
+
+import huglife.In;
 import org.junit.Test;
 import lab8.BSTMap;
 
@@ -22,11 +24,11 @@ public class TestBSTMap {
 	@Test
     public void sanityClearTest() {
     	BSTMap<String, Integer> b = new BSTMap<String, Integer>();
-        for (int i = 0; i < 455; i++) {
+        for (int i = 0; i < 1; i++) {
             b.put("hi" + i, 1);
             //make sure put is working via containsKey and get
             assertTrue( null != b.get("hi" + i)
-                        && b.containsKey("hi" + i)); 
+                    && b.containsKey("hi" + i));
         }
         b.clear();
         assertEquals(0, b.size());
@@ -50,10 +52,10 @@ public class TestBSTMap {
     	BSTMap<String, Integer> b = new BSTMap<String, Integer>();
         assertEquals(null,b.get("starChild"));
         b.put("starChild", 5);
-        assertNotEquals(null,b.get("starChild"));
-        b.put("KISS", 5);
-        assertNotEquals(null,b.get("KISS"));
-        assertNotEquals(null,b.get("starChild"));
+        assertNotEquals(null, b.get("starChild"));
+        b.put("KISS", 6);
+        assertEquals((Integer) 6, b.get("KISS"));
+        assertEquals((Integer) 5, b.get("starChild"));
     }
 
     // assumes put works
