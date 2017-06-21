@@ -28,7 +28,22 @@ public class TestComplexOomage {
          * and ensure that no bucket has fewer than N / 50
          * Oomages and no bucket has more than N / 2.5 Oomages.
          */
-        return false;
+        int [] counter = new int [10];
+        for (ComplexOomage x : oomages) {
+            int location = (x.hashCode() & 0x7FFFFFFF) % 10;
+            counter[location] += 1;
+        }
+
+        boolean answer = true;
+
+        for (int i : counter) {
+            if (i > oomages.size()/2.5 || i < oomages.size()/50 ) {
+                answer = false;
+            }
+        }
+
+
+        return answer;
     }
 
 
@@ -49,6 +64,23 @@ public class TestComplexOomage {
         /* TODO: Create a Set that shows the flaw in the hashCode function.
          */
         HashSet<ComplexOomage> oomages = new HashSet<ComplexOomage>();
+
+        int N = 10000;
+        int lastDigit = 4;
+
+        for (int i = 0; i < N; i += 1) {
+            int X = StdRandom.uniform(1, N);
+            List<Integer> params = new ArrayList<Integer>(X);
+
+            for (int j = 0; j < X; j++) {
+                int Y = StdRandom.uniform(0, 256);
+                params.add(Y);
+            }
+
+            params.add(lastDigit);
+            ComplexOomage oomage = new ComplexOomage(params);
+            oomages.add(oomage);
+        }
 
         assertTrue(haveNiceHashCodeSpread(oomages));
     }
