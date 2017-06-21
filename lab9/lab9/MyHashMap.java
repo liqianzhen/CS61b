@@ -9,34 +9,30 @@ import java.util.LinkedList;
  * Created by qianzhenli on 6/19/17.
  */
 public class MyHashMap<K, V> implements Map61B<K, V> {
-    private int initialSize;
     private int mapSize;
     private double loadFactor;
-    private HashSet allKeys;
+    private HashSet<K> allKeys;
     private LinkedList<Node> [] root;
 
     public MyHashMap(){
-        initialSize = 10;
         loadFactor = 2;
         mapSize = 0;
         root = new LinkedList [10];
-        allKeys = new HashSet();
+        allKeys = new HashSet<>();
     }
 
     public MyHashMap(int initialSize) {
-        this.initialSize = initialSize;
         loadFactor = 2;
         mapSize = 0;
-        root = new LinkedList [10];
-        allKeys = new HashSet();
+        root = new LinkedList [initialSize];
+        allKeys = new HashSet<>();
     }
 
     public MyHashMap(int initialSize, double loadFactor) {
-        this.initialSize = initialSize;
         this.loadFactor = loadFactor;
         mapSize = 0;
-        root = new LinkedList [10];
-        allKeys = new HashSet();
+        root = new LinkedList [initialSize];
+        allKeys = new HashSet<>();
     }
 
 
@@ -54,7 +50,7 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
     /** Removes all of the mappings from this map. */
     public void clear() {
         root = new LinkedList [10];
-        allKeys = new HashSet();
+        allKeys = new HashSet<>();
         mapSize = 0;
     }
 
