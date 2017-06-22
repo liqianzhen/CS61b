@@ -12,7 +12,12 @@ public class ArrayHeap<T> {
 	 * Inserts an item with the given priority value. This is enqueue, or offer.
 	 */
 	public void insert(T item, double priority) {
-
+		if (contents.size() == 0) {
+			contents.add(null);
+		}
+		Node x = new Node(item, priority);
+		contents.add(x);
+		bubbleUp(contents.size() - 1);
 	}
 
 	/**
@@ -21,6 +26,9 @@ public class ArrayHeap<T> {
 	 */
 	public Node peek() {
 		// TODO Complete this method!
+		if (contents.size() > 1) {
+			return getNode(1);
+		}
 		return null;
 	}
 
@@ -30,6 +38,12 @@ public class ArrayHeap<T> {
 	 */
 	public Node removeMin() {
 		// TODO Complete this method!
+		if (contents.size() > 1) {
+			swap(1, contents.size() - 1);
+			Node x = contents.remove(contents.size() - 1);
+			bubbleDown(1);
+			return x;
+		}
 		return null;
 	}
 
@@ -40,6 +54,16 @@ public class ArrayHeap<T> {
 	 */
 	public void changePriority(T item, double priority) {
 		// TODO Complete this method!
+		int counter = 0;
+		for (Node i : contents) {
+			if (i != null && i.myItem.equals(item)) {
+				i.myPriority = priority;
+				break;
+			}
+			counter += 1;
+		}
+		bubbleDown(counter);
+		bubbleUp(counter);
 	}
 
 	/**
@@ -103,7 +127,7 @@ public class ArrayHeap<T> {
 	 */
 	private int getLeftOf(int i) {
 		// TODO Complete this method!
-		return 0;
+		return i * 2;
 	}
 
 	/**
@@ -111,7 +135,7 @@ public class ArrayHeap<T> {
 	 */
 	private int getRightOf(int i) {
 		// TODO Complete this method!
-		return 0;
+		return i * 2 + 1 ;
 	}
 
 	/**
@@ -119,7 +143,10 @@ public class ArrayHeap<T> {
 	 */
 	private int getParentOf(int i) {
 		// TODO Complete this method!
-		return 0;
+		if (i == 1) {
+			return 1;
+		} 
+		return i/2;
 	}
 
 	/**
@@ -127,13 +154,15 @@ public class ArrayHeap<T> {
 	 */
 	private void setLeft(int index, Node n) {
 		// TODO Complete this method!
+		setNode(getLeftOf(index), n);
 	}
 
 	/**
 	 * Adds the given node as the right child of the node at the given index.
 	 */
-	private void setRight(int inde, Node n) {
+	private void setRight(int index, Node n) {
 		// TODO Complete this method!
+		setNode(getRightOf(index), n);
 	}
 
 	/**
@@ -141,13 +170,27 @@ public class ArrayHeap<T> {
 	 */
 	private void bubbleUp(int index) {
 		// TODO Complete this method!
+		int parentIndex = getParentOf(index);
+		if (parentIndex != index && getNode(index).priority() < getNode(parentIndex).priority()) {
+			swap(index, parentIndex);
+			bubbleUp(parentIndex);
+		}
 	}
 
 	/**
 	 * Bubbles down the node currently at the given index.
 	 */
-	private void bubbleDown(int inex) {
+	private void bubbleDown(int index) {
 		// TODO Complete this method!
+		int leftChildIndex = getLeftOf(index);
+		int rightChildIndex = getRightOf(index);
+
+		if ((getNode(leftChildIndex) != null || getNode(rightChildIndex) != null) &&
+				getNode(index).priority() > getNode(min(leftChildIndex, rightChildIndex)).priority()) {
+			int downValue = min(leftChildIndex, rightChildIndex);
+			swap(index, downValue);
+			bubbleDown(downValue);
+		}
 	}
 
 	/**
@@ -196,13 +239,13 @@ public class ArrayHeap<T> {
 		heap.insert("c", 3);
 		heap.insert("i", 9);
 		heap.insert("g", 7);
-		heap.insert("d", 4);
-		heap.insert("a", 1);
+		heap.insert("a", 10);
 		heap.insert("h", 8);
 		heap.insert("e", 5);
 		heap.insert("b", 2);
-		heap.insert("c", 3);
+		heap.insert("f", 6);
 		heap.insert("d", 4);
+		heap.changePriority("i", 1);
 		System.out.println(heap);
 	}
 
