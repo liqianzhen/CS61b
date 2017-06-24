@@ -11,6 +11,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -29,7 +30,7 @@ public class SuperEditor extends Application {
     private static final int WINDOW_HEIGHT = 100;
 
     private static final String fontName = "Verdana";
-    private static final int STARTING_FONT_SIZE = 10;
+    private static final int STARTING_FONT_SIZE = 16;
 
     private final FastLinkedList textContent;
     private final Group root;
@@ -110,16 +111,20 @@ public class SuperEditor extends Application {
         timeline.play();
     }
 
-    /** Makes the cursor blink periodically. */
+    /** Changes the cursor's position. */
     public void cursorPositionChange() {
         double startX;
         double startY;
         double endY;
 
-        if (textContent.size() == 0) {
+        if (textContent.size() == 0 || textContent.getText() == null) {
             startX = 0;
             startY = 0;
-            endY = 10;
+            endY = STARTING_FONT_SIZE;
+        } else if (textContent.getText().getText().equals("\r")) {
+            startX = textContent.getText().getX() + textContent.getText().getLayoutBounds().getWidth();
+            startY = textContent.getText().getY();
+            endY =textContent.getText().getY() + textContent.getText().getLayoutBounds().getHeight()/2;
         } else {
             startX = textContent.getText().getX() + textContent.getText().getLayoutBounds().getWidth();
             startY = textContent.getText().getY();
@@ -131,7 +136,18 @@ public class SuperEditor extends Application {
         cursor.setEndY(endY);
     }
 
-
+    private class MouseClickEventHandler implements EventHandler<MouseEvent> {
+        @Override
+        public void handle(MouseEvent mouseEvent) {
+            // Because we registered this EventHandler using setOnMouseClicked, it will only called
+            // with mouse events of type MouseEvent.MOUSE_CLICKED.  A mouse clicked event is
+            // generated anytime the mouse is pressed and released on the same JavaFX node.
+            double mousePressedX = mouseEvent.getX();
+            double mousePressedY = mouseEvent.getY();
+            textContent.setCurrentNode(mousePressedX, mousePressedY, STARTING_FONT_SIZE);
+            cursorPositionChange();
+        }
+    }
 
 
         @Override
@@ -142,7 +158,6 @@ public class SuperEditor extends Application {
             Parameters test=getParameters();
             String name=test.getRaw().get(0);
             String inputFilename = name;
-
 
             try {
                 File inputFile = new File(inputFilename);
@@ -181,16 +196,20 @@ public class SuperEditor extends Application {
             scene.setOnKeyTyped(keyEventHandler);
             scene.setOnKeyPressed(keyEventHandler);
 
+            //deal with the blinking cursor
             root.getChildren().add(cursor);
             CursorEventHandler cursorChange = new CursorEventHandler();
             makeCursorBlink(cursorChange);
 
+            //deal with the mouse click
+            scene.setOnMouseClicked(new MouseClickEventHandler());
 
             primaryStage.setTitle("SuperEditor");
 
             // This is boilerplate, necessary to setup the window where things are displayed.
             primaryStage.setScene(scene);
             primaryStage.show();
+            textContent.print();
         }
 
         public static void main(String[] args) {

@@ -91,9 +91,22 @@ public class FastLinkedList {
         }
     }
 
-    public void setCurrentNode(int row, int column) {
-        currentNode = NodeGet(leadingNode[row], column-1);
-        currentPos = leadingNodePos[row]+column-1;
+    public void setCurrentNode(double mousePressedX, double mousePressedY, double frontsize) {
+        if (size != 0) {
+            int row = (int) Math.floor(mousePressedY / (frontsize + 2));
+            if (row > leadingNodesize - 1) {
+                row = leadingNodesize - 1;
+            }
+            currentNode = leadingNode[row];
+            while (mousePressedX > currentNode.nodeText.getX() + currentNode.nodeText.getLayoutBounds().getWidth()/2
+                    && currentNode != leadingNode[row + 1]) {
+                currentNode = currentNode.next;
+                if (currentNode == sentinel) {
+                    break;
+                }
+            }
+            currentNode = currentNode.previous;
+        }
     }
 
     /* Nodeget is a helper method that can help x next of Node a */
@@ -112,6 +125,10 @@ public class FastLinkedList {
         leadingNodesize = 0;
 
         Node p= sentinel.next;
+        if (p != sentinel) {
+            addLeadingNode(p);
+        }
+
         int x= STARTING_TEXT_POSITION_X;
         int y= STARTING_TEXT_POSITION_y;
 
@@ -122,7 +139,7 @@ public class FastLinkedList {
 
             } else if (p.nodeText.getText().equals("\r") ) {
                 x = STARTING_TEXT_POSITION_X;
-                y += p.nodeText.getLayoutBounds().getHeight();
+                y += p.nodeText.getLayoutBounds().getHeight()/2;
 
                 //add the first node of each new line to the leading nodes
                 addLeadingNode(p);
@@ -195,7 +212,7 @@ public class FastLinkedList {
         Node p= sentinel;
         while (p.next!=sentinel) {
             p=p.next;
-            System.out.print(p.nodeText.getText());
+            System.out.print(p.nodeText.getY());
         }
     }
 
